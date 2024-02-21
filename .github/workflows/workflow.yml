@@ -1,0 +1,31 @@
+name: workflow
+on:
+  push:
+    branches:
+      - main
+      - development
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          # Install micromamba.
+          wget -qO- https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
+
+          # Install Poetry.
+          curl -sSL https://install.python-poetry.org | python3 - --version 1.7.1
+
+          # Create Mamba environment.
+          eval "$(./bin/micromamba shell hook -s posix)"
+          micromamba create --file environment.yml --yes
+          micromamba activate names
+
+          # Install Python dependencies.
+          poetry install --with test
+      - run: |
+          eval "$(./bin/micromamba shell hook -s posix)"
+          micromamba activate names
+
+          # Run tests.
+          pytest -v tests
