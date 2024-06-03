@@ -6,11 +6,12 @@ If it's less than `len(names)` (1633), then you're good.
 """
 
 import random
+from typing import LiteralString
 
 
 def sample_names(
     seed: int | float | str | bytes | bytearray, start: int, stop: int
-) -> list[str]:
+) -> list[LiteralString]:
     """Returns a slice of randomly shuffled `names`.
 
     `seed` - apply the same shuffle to `names` in future with the same seed
