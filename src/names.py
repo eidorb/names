@@ -340,10 +340,6 @@ def sample_words(
 
 
 if __name__ == "__main__":
-    import doctest
-
-    doctest.testmod()
-
     import argparse
 
     parser = argparse.ArgumentParser(description="Slice of shuffled names")
