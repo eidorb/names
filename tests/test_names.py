@@ -1,6 +1,8 @@
 """Tests names.py module."""
 
-from names import sample, words
+import subprocess
+
+from names import generate, sample, words
 
 
 def test_names():
@@ -35,3 +37,36 @@ def test_sample():
 
     # Names should be exhausted when slice goes beyond number of words.
     assert sample(seed="", start=len(words), stop=len(words) + 5) == []
+
+
+def test_generate():
+    names = generate(seed="test", count=4, offset=1630)
+    assert dict(names) == {1630: "absorb", 1631: "textile", 1632: "brush"}
+
+
+def test_cli(capsys):
+    # Go nuclear and capture text output from subprocess.
+    completed = subprocess.run(
+        "python -m names test --count 4 --offset 1630 --format json".split(),
+        capture_output=True,
+        text=True,
+    )
+    # Keys should be strings in JSON output.
+    assert (
+        completed.stdout
+        == """{
+  "1630": "absorb",
+  "1631": "textile",
+  "1632": "brush"
+}
+"""
+    )
+
+    # Run help.
+    completed = subprocess.run(
+        "python -m names --help".split(),
+        capture_output=True,
+        text=True,
+    )
+    # Help text should be dynamic.
+    assert f"{len(words)} things" in completed.stdout
