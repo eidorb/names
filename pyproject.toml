@@ -8,7 +8,9 @@ authors = [
 ]
 license = "AGPL-3.0-or-later"
 requires-python = ">=3.9"
-dependencies = []
+dependencies = [
+    "typer>=0.15.0",
+]
 
 [build-system]
 requires = ["hatchling"]
