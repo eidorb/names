@@ -26,4 +26,4 @@ jobs:
 
           # Demo output.
           uv run -m names --help
-          uv run -m names --seed "${{ github.run_id }}"
+          uv run -m names "${{ github.run_id }}"
