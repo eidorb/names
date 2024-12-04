@@ -314,8 +314,10 @@ I've pasted its contents further below. Here's what we know:
 """
 
 import random
+from enum import Enum
 
 import typer
+from rich import print, print_json
 from typing_extensions import Annotated
 
 # Extract words from raw word list.
@@ -329,12 +331,24 @@ words = tuple(
 )
 
 
+class Format(str, Enum):
+    TEXT = "text"
+    PYTHON = "python"
+    JSON = "json"
+
+
+# class Format(str, Enum):
+#     text = "text"
+#     python = "python"
+#     json = "json"
+
+
 def sample(
     seed: int | float | str | bytes | bytearray, start: int, stop: int
 ) -> list[str]:
     """Samples a slice of randomly shuffled `words`.
 
-    `seed` - seeds `random.seed()`
+    `seed` - seeds `random.seed()```
     `start` - slice start
     `stop` - slice stop
     """
@@ -342,7 +356,7 @@ def sample(
     return random.sample(population=words, k=len(words))[start:stop]
 
 
-def wrapper(
+def generate(
     seed: Annotated[
         str,
         typer.Argument(
@@ -352,16 +366,23 @@ def wrapper(
     ] = "",
     count: Annotated[int, typer.Option(help="Returns this many names.")] = 5,
     offset: Annotated[int, typer.Option(help="Skip over this many names.")] = 0,
-) -> None:
+    format: Annotated[Format, typer.Option()] = Format.TEXT,
+    # format: Annotated[str, typer.Option(help="Sets fortmat of output")] = "python",
+) -> enumerate[str]:
     """Generates a random sequence of names, seeded with SEED.
 
     Name things in your collection using the same SEED. Increase --offset as the
     collection grows.
     """
-    print(
-        dict(enumerate(sample(seed, start=offset, stop=offset + count), start=offset))
-    )
+    names = sample(seed, start=offset, stop=offset + count)
+    if format is Format.TEXT:
+        print("\n".join(names))
+    elif format is Format.PYTHON:
+        print(dict(enumerate(names, start=offset)))
+    elif format is Format.JSON:
+        print_json(data=dict(enumerate(names, start=offset)))
+    return enumerate(names, start=offset)
 
 
 if __name__ == "__main__":
-    typer.run(wrapper)  # TODO: add CLI test
+    typer.run(generate)  # TODO: add CLI test
