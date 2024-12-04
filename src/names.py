@@ -315,6 +315,8 @@ I've pasted its contents further below. Here's what we know:
 
 import random
 
+import typer
+
 # Extract words from raw word list.
 words = tuple(
     word
@@ -340,11 +342,15 @@ def sample_words(
 
 
 if __name__ == "__main__":
-    import argparse
 
-    parser = argparse.ArgumentParser(description="Slice of shuffled names")
-    parser.add_argument("--seed", default="")
-    parser.add_argument("--start", default=0, type=int)
-    parser.add_argument("--end", default=5, type=int)
-    args = parser.parse_args()
-    print("\n".join(sample_words(args.seed, args.start, args.end)))
+    def wrapper(seed: str = "", count: int = 5, offset: int = 0) -> None:
+        """Display `count` names randomised with `seed` starting from `offset`."""
+        print(
+            dict(
+                enumerate(
+                    sample_words(seed, start=offset, stop=offset + count), start=offset
+                )
+            )
+        )
+
+    typer.run(wrapper)  # TODO: add CLI test
