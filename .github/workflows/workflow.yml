@@ -22,7 +22,7 @@ jobs:
           # Run tests.
           set -x
           curl -LsSf https://astral.sh/uv/install.sh | sh
-          uv run pytest
+          uv run -v pytest
 
           # Demo output.
           uv run -m names --help
