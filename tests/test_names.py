@@ -1,6 +1,6 @@
 """Tests names.py module."""
 
-from names import sample_words, words
+from names import sample, words
 
 
 def test_names():
@@ -14,24 +14,24 @@ def test_names():
     assert len(words) == 1633
 
 
-def test_sample_names():
+def test_sample():
     # The first name with seed "" is known.
-    assert sample_words(seed="", start=0, stop=1)[0] == "spirit"
+    assert sample(seed="", start=0, stop=1)[0] == "spirit"
 
     # Same seed should produce the same words.
-    first = sample_words(seed="", start=0, stop=5)
-    second = sample_words(seed="", start=0, stop=5)
+    first = sample(seed="", start=0, stop=5)
+    second = sample(seed="", start=0, stop=5)
     assert first == second
 
     # Different seed should return different words.
-    first = sample_words(seed="1", start=0, stop=5)
-    second = sample_words(seed="2", start=0, stop=5)
+    first = sample(seed="1", start=0, stop=5)
+    second = sample(seed="2", start=0, stop=5)
     assert first != second
 
     # Different slice should not change order of words.
-    first = sample_words(seed="", start=0, stop=5)
-    second = sample_words(seed="", start=2, stop=5)
+    first = sample(seed="", start=0, stop=5)
+    second = sample(seed="", start=2, stop=5)
     assert first[2:] == second
 
     # Names should be exhausted when slice goes beyond number of words.
-    assert sample_words(seed="", start=len(words), stop=len(words) + 5) == []
+    assert sample(seed="", start=len(words), stop=len(words) + 5) == []

@@ -329,12 +329,12 @@ words = tuple(
 )
 
 
-def sample_words(
+def sample(
     seed: int | float | str | bytes | bytearray, start: int, stop: int
 ) -> list[str]:
-    """Returns a slice of randomly shuffled `words`.
+    """Samples a slice of randomly shuffled `words`.
 
-    `seed` - shuffle `words` the same way in future
+    `seed` - sets seed for random sample
     `start` - slice start
     `stop` - slice stop
     """
@@ -347,11 +347,7 @@ def wrapper(
 ) -> None:
     """Display names randomised with SEED."""
     print(
-        dict(
-            enumerate(
-                sample_words(seed, start=offset, stop=offset + count), start=offset
-            )
-        )
+        dict(enumerate(sample(seed, start=offset, stop=offset + count), start=offset))
     )
 
 
