@@ -316,6 +316,7 @@ I've pasted its contents further below. Here's what we know:
 import random
 
 import typer
+from typing_extensions import Annotated
 
 # Extract words from raw word list.
 words = tuple(
@@ -341,16 +342,18 @@ def sample_words(
     return random.sample(population=words, k=len(words))[start:stop]
 
 
-if __name__ == "__main__":
-
-    def wrapper(seed: str = "", count: int = 5, offset: int = 0) -> None:
-        """Display `count` names randomised with `seed` starting from `offset`."""
-        print(
-            dict(
-                enumerate(
-                    sample_words(seed, start=offset, stop=offset + count), start=offset
-                )
+def wrapper(
+    seed: Annotated[str, typer.Argument()] = "", count: int = 5, offset: int = 0
+) -> None:
+    """Display names randomised with SEED."""
+    print(
+        dict(
+            enumerate(
+                sample_words(seed, start=offset, stop=offset + count), start=offset
             )
         )
+    )
 
+
+if __name__ == "__main__":
     typer.run(wrapper)  # TODO: add CLI test
