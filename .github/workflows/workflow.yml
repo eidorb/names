@@ -1,31 +1,29 @@
-name: workflow
 on:
   push:
     branches:
       - main
-      - development
+# Do not attempt concurrent deployments.
+concurrency:
+  group: ${{ github.workflow }}
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+      - id: cache
+        uses: actions/cache@v4
+        # Keep uv cache and Python virtual environment
+        with:
+          key: ${{ hashFiles('.python-version', 'uv.lock') }}
+          path: |
+            ~/.local/share/uv
+            .venv
       - run: |
-          # Install micromamba.
-          wget -qO- https://micro.mamba.pm/api/micromamba/linux-64/latest | tar -xvj bin/micromamba
-
-          # Install Poetry.
-          curl -sSL https://install.python-poetry.org | python3 - --version 1.7.1
-
-          # Create Mamba environment.
-          eval "$(./bin/micromamba shell hook -s posix)"
-          micromamba create --file environment.yml --yes
-          micromamba activate names
-
-          # Install Python dependencies.
-          poetry install --with test
-      - run: |
-          eval "$(./bin/micromamba shell hook -s posix)"
-          micromamba activate names
-
           # Run tests.
-          pytest -v tests
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          uv run pytest
+
+          # Demo output.
+          uv run -m names --help
+          echo 'uv run python --seed "${{ github.run_id }}":'
+          uv run -m names --seed "${{ github.run_id }}"
