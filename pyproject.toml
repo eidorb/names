@@ -18,3 +18,8 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build]
 packages = ["src/names.py"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.4",
+]
