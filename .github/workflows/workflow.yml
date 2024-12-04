@@ -20,10 +20,10 @@ jobs:
             .venv
       - run: |
           # Run tests.
+          set -x
           curl -LsSf https://astral.sh/uv/install.sh | sh
           uv run pytest
 
           # Demo output.
           uv run -m names --help
-          echo 'uv run python --seed "${{ github.run_id }}":'
           uv run -m names --seed "${{ github.run_id }}"
