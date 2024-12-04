@@ -337,10 +337,7 @@ class Format(str, Enum):
     JSON = "json"
 
 
-# class Format(str, Enum):
-#     text = "text"
-#     python = "python"
-#     json = "json"
+app = typer.Typer()
 
 
 def sample(
@@ -356,6 +353,15 @@ def sample(
     return random.sample(population=words, k=len(words))[start:stop]
 
 
+# TODO: add CLI test
+@app.command(
+    help=f"""Generates a random sequence of names, seeded with SEED.
+
+Name things in your collection using the same SEED. Increase --offset as the
+collection grows.
+(You can name up to {len(words)} things.)
+"""
+)
 def generate(
     seed: Annotated[
         str,
@@ -367,13 +373,8 @@ def generate(
     count: Annotated[int, typer.Option(help="Returns this many names.")] = 5,
     offset: Annotated[int, typer.Option(help="Skip over this many names.")] = 0,
     format: Annotated[Format, typer.Option()] = Format.TEXT,
-    # format: Annotated[str, typer.Option(help="Sets fortmat of output")] = "python",
 ) -> enumerate[str]:
-    """Generates a random sequence of names, seeded with SEED.
-
-    Name things in your collection using the same SEED. Increase --offset as the
-    collection grows.
-    """
+    """Generates a random sequence of names, seeded with `seed`."""
     names = sample(seed, start=offset, stop=offset + count)
     if format is Format.TEXT:
         print("\n".join(names))
@@ -385,4 +386,4 @@ def generate(
 
 
 if __name__ == "__main__":
-    typer.run(generate)  # TODO: add CLI test
+    app()
