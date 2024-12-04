@@ -334,7 +334,7 @@ def sample(
 ) -> list[str]:
     """Samples a slice of randomly shuffled `words`.
 
-    `seed` - sets seed for random sample
+    `seed` - seeds `random.seed()`
     `start` - slice start
     `stop` - slice stop
     """
@@ -343,9 +343,21 @@ def sample(
 
 
 def wrapper(
-    seed: Annotated[str, typer.Argument()] = "", count: int = 5, offset: int = 0
+    seed: Annotated[
+        str,
+        typer.Argument(
+            help="Use a fixed seed to ensure names are shuffled in the same order. "
+            "It can be any value, even nothing. Just be sure to remember it."
+        ),
+    ] = "",
+    count: Annotated[int, typer.Option(help="Returns this many names.")] = 5,
+    offset: Annotated[int, typer.Option(help="Skip over this many names.")] = 0,
 ) -> None:
-    """Display names randomised with SEED."""
+    """Generates a random sequence of names, seeded with SEED.
+
+    Name things in your collection using the same SEED. Increase --offset as the
+    collection grows.
+    """
     print(
         dict(enumerate(sample(seed, start=offset, stop=offset + count), start=offset))
     )
