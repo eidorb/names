@@ -313,18 +313,22 @@ I've pasted its contents further below. Here's what we know:
       yes
 """
 
+import itertools
+import math
 import random
+from dataclasses import dataclass
 from enum import Enum
 
 import typer
 from rich import print, print_json
+from rich.progress import Progress, SpinnerColumn
 from typing_extensions import Annotated
 
-# Extract words from raw word list.
-words = tuple(
+# Extract words from raw mnemonic word list.
+words: tuple[str, ...] = tuple(
     word
     for line in
-    # Slice above docstring from first mnemonic onwards.
+    # Slice docstring from first mnemonic onwards.
     __doc__[__doc__.index("\n      acrobat") :].splitlines()
     # Split each line into words.
     for word in line.split()
@@ -337,30 +341,48 @@ class Format(str, Enum):
     JSON = "json"
 
 
-app = typer.Typer()
+def permutations(r=1):
+    """Return successive `r` length permutations of words."""
+    # TODO: improve memory usage using integer indices?
+    return itertools.permutations(words, r=r)
 
 
 def sample(
-    seed: int | float | str | bytes | bytearray, start: int, stop: int
+    seed: int | float | str | bytes | bytearray,
+    population,
+    start: int,
+    stop: int,
 ) -> list[str]:
-    """Samples a slice of randomly shuffled `words`.
+    """Samples a slice of randomly shuffled `population`.
 
     `seed` - seeds `random.seed()```
     `start` - slice start
     `stop` - slice stop
     """
     random.seed(seed)
-    return random.sample(population=words, k=len(words))[start:stop]
+    population = tuple(population)
+    return random.sample(population=population, k=len(population))[start:stop]
 
 
-# TODO: add CLI test
+app = typer.Typer(add_completion=False)
+
+
 @app.command(
-    help=f"""Generates a random sequence of names, seeded with SEED.
+    # TODO: move this to function docstring?
+    help=f"""Generates a random sequence of names made of words from a word list.
 
-Name things in your collection using the same SEED. Increase --offset as the
-collection grows.
-(You can name up to {len(words)} things.)
-"""
+- SEED determines the order of names. Name all things in your collection using the same seed.
+
+- Increase --offset to generate more names as your collections grow.
+
+- You can name collections of up to {math.perm(len(words), 2)} things before adjusting --r.
+""",
+    epilog=f"""Beyond length 2 permutations (--r > 2), we probably need more efficient
+and interesting approaches (r=1: {math.perm(len(words), 1)}, r=2: {math.perm(len(words), 2)},
+r=3: {math.perm(len(words), 3)}, ...).
+
+With that being said, set --eighteen-plus if setting --r > 2.
+""",
 )
 def generate(
     seed: Annotated[
@@ -372,17 +394,47 @@ def generate(
     ] = "",
     count: Annotated[int, typer.Option(help="Returns this many names.")] = 5,
     offset: Annotated[int, typer.Option(help="Skip over this many names.")] = 0,
-    format: Annotated[Format, typer.Option()] = Format.TEXT,
-) -> enumerate[str]:
+    # "r" comes from itertools.permutations().
+    r: Annotated[
+        int,
+        typer.Option(
+            help="Names are permutations of length r, each permutation comprising of r words.",
+            min=1,
+        ),
+    ] = 1,
+    format: Annotated[
+        Format, typer.Option(help="Set output to this format.")
+    ] = Format.TEXT,
+    eighteen_plus: Annotated[
+        bool,
+        typer.Option(help="Proceed with potentially expensive computation."),
+    ] = False,
+) -> list[tuple[int, str]]:
     """Generates a random sequence of names, seeded with `seed`."""
-    names = sample(seed, start=offset, stop=offset + count)
+    if not eighteen_plus and r > 2:
+        print("Set --eighteen-plus when --r > 2")
+        raise typer.Abort()
+    with Progress(SpinnerColumn(), transient=True) as progress:
+        progress.add_task("task")
+        names = list(
+            enumerate(
+                sample(
+                    seed,
+                    population=permutations(r=r),
+                    start=offset,
+                    stop=offset + count,
+                ),
+                start=offset,
+            )
+        )
     if format is Format.TEXT:
-        print("\n".join(names))
+        # Name in text format is hyphen-separated words.
+        print("\n".join(list("-".join(words) for _, words in names)))
     elif format is Format.PYTHON:
-        print(dict(enumerate(names, start=offset)))
+        print(dict(names))
     elif format is Format.JSON:
-        print_json(data=dict(enumerate(names, start=offset)))
-    return enumerate(names, start=offset)
+        print_json(data=dict(names))
+    return names
 
 
 if __name__ == "__main__":
