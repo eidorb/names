@@ -10,19 +10,19 @@ It's easy to start developing locally:
 
 1. Install [uv](https://docs.astral.sh/uv/):
 
-  ```bash
-  curl -LsSf https://astral.sh/uv/install.sh | sh
+  ```console
+  $ curl -LsSf https://astral.sh/uv/install.sh | sh
   ```
 2. Clone this repository:
 
-  ```bash
-  git clone git@github.com:eidorb/names.git
-  cd names
+  ```console
+  $ git clone git@github.com:eidorb/names.git
+  $ cd names
   ```
 3. Generate some names:
 
-  ```bash
-  uv run -m names "seedy"
+  ```console
+  $ uv run -m names "seedy"
   gravity
   postage
   salary
@@ -35,15 +35,15 @@ uv will find, install and update a suitable Python interpreter and Python packag
 
 Alternatively, you could activate a shell in the environment:
 
-```bash
+```console
 $ uv sync
 $ source .venv/bin/activate
 ```
 
 And run commands as usual:
 
-```bash
-(om-names) $ python -m names --help
+```console
+(om-names)$ python -m names --help
 
  Usage: names.py [OPTIONS] [SEED]
 
@@ -74,8 +74,8 @@ And run commands as usual:
 
 Deactivate when you're done:
 
-```bash
-(om-names) $ deactivate
+```console
+(om-names)$ deactivate
 $
 ```
 
@@ -86,20 +86,20 @@ From the command line.
 
 - Actions
 
-  ```bash
+  ```shell
   open "https://github.com/eidorb/${PWD##*/}/actions"
   ```
 - Actions secrets
 
-  ```bash
+  ```shell
   open "https://github.com/eidorb/${PWD##*/}/settings/secrets/actions"
   ```
 
 
 ## Some command line poetry
 
-```bash
-echo "write the most insightful and terse poem you can about the difficulties of " \
+```console
+$ echo "write the most insightful and terse poem you can about the difficulties of " \
      "naming things using these words (be sure to include a valid http url link):\n" \
      "$(uv run -m names)" \
   | uvx llm -m grok-beta
