@@ -11,12 +11,9 @@ concurrency:
 jobs:
   job:
     runs-on: ubuntu-latest
-    permissions:
-      # Allows JWT to be requested from GitHub's OIDC provider.
-      id-token: write
     strategy:
       matrix:
-        python-version: ["3.10", "3.11", "3.12", "3.13"]
+        python-version: ["3.13"]
     steps:
       - uses: actions/checkout@v4
       - id: cache
@@ -37,20 +34,6 @@ jobs:
           set -x
           uv run -m names --help
           uv run -m names "${{ github.run_id }}" --count 10 --offset 1000 --format python
-
-          # Build.
-          uv build
-      # Only publish if releasing.
-      - if: startsWith(github.ref, 'refs/tags/')
-        uses: pypa/gh-action-pypi-publish@v1.12.2
-  orate:
-    # Only run if releasing.
-    if: startsWith(github.ref, 'refs/tags/')
-    # Don't care if this job fails.
-    continue-on-error: true
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
       - run: |
           # Say something deep, dawg!
           set -x
@@ -60,5 +43,6 @@ jobs:
                "naming things using these words (be sure to include a valid http url link):\n" \
                "$(uv run -m names ${{ github.run_id }})" \
             | uvx llm -m grok-beta
+        continue-on-error: true
         env:
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
