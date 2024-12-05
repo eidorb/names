@@ -44,3 +44,19 @@ As the world watches, with eyes that gleam.
 In this time of trial, we stand together,
 Hoping for a future, a world to weather.
 ```
+
+
+## Quick links
+
+From the command line.
+
+- Actions
+
+  ```bash
+  open "https://github.com/eidorb/${PWD##*/}/actions"
+  ```
+- Actions secrets
+
+  ```bash
+  open "https://github.com/eidorb/${PWD##*/}/settings/secrets/actions"
+  ```
