@@ -27,6 +27,10 @@ jobs:
           set -x
           uv run -m names --help
           uv run -m names "${{ github.run_id }}" --count 10 --offset 1000 --format python
+  orate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
       - run: |
           # Say something deep, dawg!
           set -x
