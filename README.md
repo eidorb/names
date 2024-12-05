@@ -1,6 +1,7 @@
 # Names
 
-An API for naming things
+An API for exploring the essence of naming \
+![](image.jpeg)
 
 
 ## Getting started
