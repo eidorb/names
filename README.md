@@ -47,19 +47,27 @@ And run commands as usual:
  Usage: names.py [OPTIONS] [SEED]
 
  Generates a random sequence of names, seeded with SEED.
- Name things in your collection using the same SEED. Increase --offset as the collection grows. (You can name up to 1633 things.)
+ Name things in your collection using the same SEED. Increase --offset as the
+ collection grows. (You can name up to 1633 things.)
 
-╭─ Arguments ─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│   seed      [SEED]  Use a fixed seed to ensure names are shuffled in the same order. It can be any value, even nothing. Just be sure to remember it.                                                            │
-╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
-╭─ Options ───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
-│ --count                     INTEGER             Returns this many names. [default: 5]                                                                                                                           │
-│ --offset                    INTEGER             Skip over this many names. [default: 0]                                                                                                                         │
-│ --format                    [text|python|json]  [default: text]                                                                                                                                                 │
-│ --install-completion                            Install completion for the current shell.                                                                                                                       │
-│ --show-completion                               Show completion for the current shell, to copy it or customize the installation.                                                                                │
-│ --help                                          Show this message and exit.                                                                                                                                     │
-╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+╭─ Arguments ──────────────────────────────────────────────────────────────────╮
+│   seed      [SEED]  Use a fixed seed to ensure names are shuffled in the     │
+│                     same order. It can be any value, even nothing. Just be   │
+│                     sure to remember it.                                     │
+╰──────────────────────────────────────────────────────────────────────────────╯
+╭─ Options ────────────────────────────────────────────────────────────────────╮
+│ --count                     INTEGER             Returns this many names.     │
+│                                                 [default: 5]                 │
+│ --offset                    INTEGER             Skip over this many names.   │
+│                                                 [default: 0]                 │
+│ --format                    [text|python|json]  [default: text]              │
+│ --install-completion                            Install completion for the   │
+│                                                 current shell.               │
+│ --show-completion                               Show completion for the      │
+│                                                 current shell, to copy it or │
+│                                                 customize the installation.  │
+│ --help                                          Show this message and exit.  │
+╰──────────────────────────────────────────────────────────────────────────────╯
 ```
 
 
