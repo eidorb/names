@@ -7,7 +7,7 @@ authors = [
     { name = "eidorb", email = "brodieface@gmail.com" }
 ]
 license = "AGPL-3.0-or-later"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 dependencies = [
     "typer>=0.15.0",
 ]
