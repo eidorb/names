@@ -38,11 +38,10 @@ jobs:
           # Say something deep, dawg!
           set -x
           curl -LsSf https://astral.sh/uv/install.sh | sh
-          uvx llm install llm-grok
           echo "write the most insightful and terse poem you can about the difficulties of " \
-               "naming things using these words (be sure to include a valid http url link):\n" \
-               "$(uv run -m names ${{ github.run_id }})" \
-            | uvx llm -m grok-beta
+               "naming things, using the following words:\n" \
+               "$(uv -q run -m names ${{ github.run_id }})" \
+            | uvx -q --with llm-grok llm -m grok-beta
         continue-on-error: true
         env:
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
