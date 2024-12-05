@@ -20,10 +20,19 @@ jobs:
             .venv
       - run: |
           # Run tests.
-          set -x
           curl -LsSf https://astral.sh/uv/install.sh | sh
           uv run pytest
 
           # Demo output.
+          set -x
           uv run -m names --help
           uv run -m names "${{ github.run_id }}" --count 10 --offset 1000 --format python
+      - run: |
+          # Say something deep, dawg!
+          set -x
+          uvx llm install llm-grok
+          echo "write the most insightful and terse poem you can about the difficulties of " \
+            "naming things using these words:\n$(uv run -m names ${{ github.run_id }})" \
+              | uvx llm -m grok-beta
+        env:
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
