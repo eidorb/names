@@ -26,4 +26,4 @@ jobs:
 
           # Demo output.
           uv run -m names --help
-          uv run -m names "${{ github.run_id }}"
+          uv run -m names "${{ github.run_id }}" --count 10 --offset 1000 --format python
