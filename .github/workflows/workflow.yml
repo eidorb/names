@@ -32,7 +32,8 @@ jobs:
           set -x
           uvx llm install llm-grok
           echo "write the most insightful and terse poem you can about the difficulties of " \
-            "naming things using these words:\n$(uv run -m names ${{ github.run_id }})" \
-              | uvx llm -m grok-beta
+               "naming things using these words (be sure to include a valid http url link):\n" \
+               "$(uv run -m names ${{ github.run_id }})" \
+            | uvx llm -m grok-beta
         env:
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
