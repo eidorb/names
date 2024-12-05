@@ -35,8 +35,8 @@ uv will find, install and update a suitable Python interpreter and Python packag
 Alternatively, you could activate a shell in the environment:
 
 ```bash
-uv sync
-source .venv/bin/activate
+$ uv sync
+$ source .venv/bin/activate
 ```
 
 And run commands as usual:
@@ -78,19 +78,6 @@ Deactivate when you're done:
 $
 ```
 
-Some command line poetry:
-
-```bash
-echo "write the most insightful and terse poem you can about the difficulties of " \
-"naming things using these words:\n$(uv run -m names)" \
-  | uvx llm -m grok-beta
-
-In the spirit of naming, we embark,
-A toga of words, a daunting task.
-Concert of thoughts, a symphony of choice,
-A period of struggle, a ranger's voice.
-```
-
 
 ## Quick links
 
@@ -106,3 +93,35 @@ From the command line.
   ```bash
   open "https://github.com/eidorb/${PWD##*/}/settings/secrets/actions"
   ```
+
+
+## Some command line poetry
+
+```bash
+echo "write the most insightful and terse poem you can about the difficulties of " \
+     "naming things using these words (be sure to include a valid http url link):\n" \
+     "$(uv run -m names)" \
+  | uvx llm -m grok-beta
+In the realm of naming, a **spirit** soars,
+A **toga** of words, a **concert** of thoughts.
+A **period** of struggle, a **ranger** explores,
+For the perfect name, a battle is fought.
+
+[Explore the essence of naming](https://en.wikipedia.org/wiki/Naming)
+```
+
+```mermaid
+graph TD
+    START:::hidden --> ?
+    END --> ? --> START
+    ? --> END:::hidden
+
+    classDef hidden display: none;
+```
+
+> In the realm of naming, a **spirit** soars,\
+> A **toga** of words, a **concert** of thoughts.\
+> A **period** of struggle, a **ranger** explores,\
+> For the perfect name, a battle is fought.
+>
+> [Explore the essence of naming](https://en.wikipedia.org/wiki/Naming)
