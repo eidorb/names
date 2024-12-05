@@ -1,5 +1,5 @@
 version = 1
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 
 [[package]]
 name = "click"
@@ -79,7 +79,6 @@ requires-dist = [{ name = "typer", specifier = ">=0.15.0" }]
 
 [package.metadata.requires-dev]
 dev = [{ name = "pytest", specifier = ">=8.3.4" }]
-test = []
 
 [[package]]
 name = "packaging"
