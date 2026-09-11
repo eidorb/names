@@ -11,6 +11,8 @@ requires-python = ">=3.10"
 
 [dependency-groups]
 dev = [
+    "aws-cdk-cli>=2.1141.0",
+    "aws-cdk-lib>=2.269.0",
     "marimo>=0.24.1",
     "ruff>=0.16.7",
 ]
