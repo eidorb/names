@@ -21,7 +21,7 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
 
           # build website
-          uv run marimo export html-wasm app.py --output dist --mode run
+          uv run marimo export html-wasm app.py --sandbox --output dist --mode run
 
           # deploy cdk stack
           uv run cdk deploy --require-approval never
