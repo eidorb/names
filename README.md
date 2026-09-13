@@ -11,7 +11,9 @@ Given the same seed, words per name, and position, the same name is always retur
 
 ## Usage
 
-Run on the command line:
+Generate names on a website: https://names.brodie.id.au
+
+Generate names on the command line:
 
 ```console
 $ git clone git@github.com:eidorb/names.git
