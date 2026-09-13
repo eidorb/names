@@ -129,6 +129,15 @@ def _(CopyToClipboard, count, mo, n, names, position, seed):
     return
 
 
+@app.cell(hide_code=True)
+def _(mo):
+    mo.md("""
+    - Wordlist from [mnemonic encoder project](https://web.archive.org/web/20100105040244/http://tothink.com/mnemonic/index.html)
+    - [Source](https://github.com/eidorb/names)
+    """)
+    return
+
+
 @app.cell
 def _():
     # from https://github.com/koaning/wigglystuff/blob/main/js/copybutton/widget.js
