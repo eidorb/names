@@ -70,6 +70,8 @@ class Website(cdk.Stack):
             certificate=certificate,
             default_root_object="index.html",
             domain_names=[self.domain_name],
+            # cheapest set of edge locations
+            price_class=cloudfront.PriceClass.PRICE_CLASS_100,
         )
 
         # Populate bucket with files from website export directory.
