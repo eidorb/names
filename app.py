@@ -16,7 +16,6 @@ app = marimo.App(app_title="Names", auto_download=["html"])
 @app.cell
 def _():
     import math
-
     import marimo as mo
     import names
 
@@ -40,13 +39,7 @@ def _(mo):
 
 
 @app.cell
-def _(mo, query_params):
-    get_n_state, set_n_state = mo.state(int(query_params.get("n", "2")))
-    return get_n_state, set_n_state
-
-
-@app.cell
-def _(get_n_state, math, mo, names, query_params, set_n_state):
+def _(math, mo, names, query_params):
     seed = mo.ui.text(
         value=query_params.get("seed", ""),
         placeholder="Enter a seed...",
@@ -54,14 +47,13 @@ def _(get_n_state, math, mo, names, query_params, set_n_state):
     )
 
     def n_on_change(value):
-        set_n_state(value)
         query_params.set("n", str(value))
-        # clamp position qparam when n changes
+        # clamp start qparam when n changes
         query_params.set(
-            "position",
+            "start",
             str(
                 min(
-                    int(query_params.get("position", 0)),
+                    int(query_params.get("start", 0)),
                     math.perm(len(names.words), value) - 1,
                 )
             ),
@@ -69,7 +61,7 @@ def _(get_n_state, math, mo, names, query_params, set_n_state):
 
     n = mo.ui.dropdown(
         options=list(range(1, 6)),
-        value=get_n_state(),
+        value=int(query_params.get("n", "2")),
         on_change=n_on_change,
     )
     count = mo.ui.slider(
@@ -81,20 +73,27 @@ def _(get_n_state, math, mo, names, query_params, set_n_state):
         show_value=True,
         on_change=lambda value: query_params.set("count", str(value)),
     )
-    position_stop = math.perm(len(names.words), get_n_state()) - 1
-    position = mo.ui.number(
-        start=0,
-        stop=position_stop,
-        step=1,
-        # clamp value to stop
-        value=min(int(query_params.get("position", 0)), position_stop),
-        on_change=lambda value: query_params.set("position", str(value)),
-    )
-    return count, n, position, seed
+    return count, n, seed
 
 
 @app.cell
-def _(count, math, mo, n, names, position, seed):
+def _(math, mo, n, names, query_params):
+    start = mo.ui.number(
+        start=0,
+        stop=math.perm(len(names.words), n.value) - 1,
+        step=1,
+        # clamp value when n changes.
+        value=min(
+            int(query_params.get("start", 0)),
+            math.perm(len(names.words), n.value) - 1,
+        ),
+        on_change=lambda value: query_params.set("start", str(value)),
+    )
+    return (start,)
+
+
+@app.cell
+def _(count, math, mo, n, names, seed, start):
     mo.md(rf"""
     ## Name generator
 
@@ -104,24 +103,24 @@ def _(count, math, mo, n, names, position, seed):
 
     Set **count** to choose how many names to generate: {count}
 
-    Set **position** to jump to any point in the sequence of names: {position}
+    Set **start** to jump to any point in the sequence of names: {start}
 
-    The same **seed**, **n**, and **position** will always give you the same name.
+    The same **seed**, **n**, and **start** will always give you the same name.
     You can bookmark this page and come back to it later — the URL keeps your chosen parameters.
     """)
     return
 
 
 @app.cell
-def _(CopyToClipboard, count, mo, n, names, position, seed):
+def _(CopyToClipboard, count, mo, n, names, seed, start):
     mo.md(f"""
     | | | |
     |-|-|-|
     {
         "\n".join(
-            f"| {position.value + i} | `{'-'.join(name)}` | {mo.ui.anywidget(CopyToClipboard(text_to_copy='-'.join(name)))} |"
+            f"| {start.value + i} | `{'-'.join(name)}` | {mo.ui.anywidget(CopyToClipboard(text_to_copy='-'.join(name)))} |"
             for i, name in enumerate(
-                names.generate_names(seed.value, n.value, count.value, position.value)
+                names.generate_names(seed.value, n.value, count.value, start.value)
             )
         )
     }
